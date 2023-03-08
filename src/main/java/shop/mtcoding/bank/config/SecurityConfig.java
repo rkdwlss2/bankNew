@@ -22,9 +22,12 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+    //JWT 필터 등록이 필요함
+
     //JWP 서버를 만들 예정 session 사용 안함
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
+        log.debug("디버그 : filterChain 빈 등록됨");
         http.headers().frameOptions().disable(); // iframe 허용 안함
         http.csrf().disable(); // post맨 작동 안함 metacoding 유튜브 시큐리티 강의 참고
         http.cors().configurationSource(configurationSource());
@@ -42,6 +45,7 @@ public class SecurityConfig {
     }
 
     public CorsConfigurationSource configurationSource(){
+        log.debug("디버그 : configurationSource cors 설정이 security filterchain 에 등록됨");
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
