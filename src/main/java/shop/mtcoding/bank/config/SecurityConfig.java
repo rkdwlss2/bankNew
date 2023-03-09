@@ -37,9 +37,17 @@ public class SecurityConfig {
         http.formLogin().disable();
     // httpBasic은 브라우저가 팝업창을 이용해서 사용자 인증 진행 해지
         http.httpBasic().disable();
+
+        // Exception 가로채기
+        http.exceptionHandling().authenticationEntryPoint((request,response,authException)->{
+//            response.setContentType("application/json; charset=utf-8");
+            response.setStatus(403);
+            response.getWriter().println("error");
+        });
+
         http.authorizeRequests()
                 .antMatchers("/api/s/**").authenticated()
-                .antMatchers("api/admin/**").hasRole(""+ UserEnum.ADMIN) //최근에 공식 문서는 안붙여도 됨
+                .antMatchers("/api/admin/**").hasRole(""+ UserEnum.ADMIN) //최근에 공식 문서는 안붙여도 됨
                 .anyRequest().permitAll();
         return http.build();
     }
